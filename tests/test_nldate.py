@@ -38,6 +38,14 @@ def test_absolute_month_name_with_ordinal() -> None:
     assert parse("December 1st, 2025", TODAY) == date(2025, 12, 1)
 
 
+def test_dotted_month_abbreviation() -> None:
+    assert parse("Dec. 1, 2025", TODAY) == date(2025, 12, 1)
+
+
+def test_dotted_weekday_abbreviation() -> None:
+    assert parse("next Tues.", TODAY) == date(2025, 11, 25)
+
+
 def test_days_before_absolute_date() -> None:
     assert parse("5 days before December 1st, 2025", TODAY) == date(2025, 11, 26)
 

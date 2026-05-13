@@ -156,6 +156,7 @@ def _parse_normalized(text: str, today: date) -> date:
 def _normalize(s: str) -> str:
     text = s.strip().lower()
     text = re.sub(r"\b(\d+)(st|nd|rd|th)\b", r"\1", text)
+    text = re.sub(r"\b([a-z]+)\.", r"\1", text)
     text = re.sub(r"(?<=[a-z])-(?=[a-z])", " ", text)
     text = re.sub(r"\bfrom now\b", "from today", text)
     text = re.sub(r"\s*,\s*", " ", text)
@@ -174,9 +175,13 @@ def _parse_before_after(text: str, today: date) -> date | None:
             continue
 
         anchor_text = match.group("anchor")
-        anchor = today if anchor_text == "today" and keyword == "from" else parse(
-            anchor_text,
-            today,
+        anchor = (
+            today
+            if anchor_text == "today" and keyword == "from"
+            else parse(
+                anchor_text,
+                today,
+            )
         )
         sign = -1 if keyword == "before" else 1
         return _apply_offsets(anchor, offsets, sign)
