@@ -1,0 +1,32 @@
+[project]
+name = "nldate"
+version = "0.1.0"
+description = "A small natural-language date parser."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "mypy>=1.18.0",
+    "pytest>=8.0.0,<9.0.0",
+    "ruff>=0.14.0",
+]
+
+[tool.uv]
+package = true
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+
+[build-system]
+requires = ["uv_build>=0.9.0,<0.12.0"]
+build-backend = "uv_build"
