@@ -112,27 +112,26 @@ class Offset:
     unit: str
 
 
-def parse(s: str, today: date | None = None) -> date:
+def parse(s: str, today: date | None = None) -> date | None:
     """Parse a natural-language date expression into a ``datetime.date``.
 
     Args:
         s: The date expression to parse.
         today: Reference date for relative expressions. Defaults to today.
 
-    Raises:
-        DateParseError: If the expression is empty or unsupported.
+    Returns:
+        The parsed date, or ``None`` if the expression is unsupported.
     """
 
     reference = date.today() if today is None else today
     normalized = _normalize(s)
     if not normalized:
-        msg = "date expression cannot be empty"
-        raise DateParseError(msg)
+        return None
 
     return _parse_normalized(normalized, reference)
 
 
-def _parse_normalized(text: str, today: date) -> date:
+def _parse_normalized(text: str, today: date) -> date | None:
     before_after = _parse_before_after(text, today)
     if before_after is not None:
         return before_after
@@ -149,8 +148,7 @@ def _parse_normalized(text: str, today: date) -> date:
     if absolute is not None:
         return absolute
 
-    msg = f"could not parse date expression: {text!r}"
-    raise DateParseError(msg)
+    return None
 
 
 def _normalize(s: str) -> str:
@@ -183,6 +181,9 @@ def _parse_before_after(text: str, today: date) -> date | None:
                 today,
             )
         )
+        if anchor is None:
+            return None
+
         sign = -1 if keyword == "before" else 1
         return _apply_offsets(anchor, offsets, sign)
 
