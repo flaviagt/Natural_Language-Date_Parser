@@ -1,5 +1,5 @@
 """Natural-language date parsing."""
 
-from nldate.parser import DateParseError, parse
+from nldate.parser import parse
 
-__all__ = ["DateParseError", "parse"]
+__all__ = ["parse"]

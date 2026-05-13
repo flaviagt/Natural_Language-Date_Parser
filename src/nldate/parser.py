@@ -12,11 +12,6 @@ import re
 from dataclasses import dataclass
 from datetime import date, timedelta
 
-
-class DateParseError(ValueError):
-    """Raised when a string cannot be parsed as a supported date expression."""
-
-
 MONTHS: dict[str, int] = {
     "january": 1,
     "jan": 1,
@@ -120,14 +115,14 @@ def parse(s: str, today: date | None = None) -> date:
         today: Reference date for relative expressions. Defaults to today.
 
     Raises:
-        DateParseError: If the expression is empty or unsupported.
+        ValueError: If the expression is empty or unsupported.
     """
 
     reference = date.today() if today is None else today
     normalized = _normalize(s)
     if not normalized:
         msg = "date expression cannot be empty"
-        raise DateParseError(msg)
+        raise ValueError(msg)
 
     return _parse_normalized(normalized, reference)
 
@@ -150,7 +145,7 @@ def _parse_normalized(text: str, today: date) -> date:
         return absolute
 
     msg = f"could not parse date expression: {text!r}"
-    raise DateParseError(msg)
+    raise ValueError(msg)
 
 
 def _normalize(s: str) -> str:
@@ -367,7 +362,7 @@ def _apply_offsets(start: date, offsets: list[Offset], sign: int) -> date:
             result = _add_months(result, value * 12)
         else:
             msg = f"unsupported offset unit: {offset.unit!r}"
-            raise DateParseError(msg)
+            raise ValueError(msg)
     return result
 
 

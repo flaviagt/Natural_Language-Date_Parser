@@ -2,7 +2,7 @@ from datetime import date
 
 import pytest
 
-from nldate import DateParseError, parse
+from nldate import parse
 
 TODAY = date(2025, 11, 20)
 
@@ -92,8 +92,3 @@ def test_month_overflow_clamps_to_last_day() -> None:
 def test_raises_value_error_for_invalid_or_non_date_input(text: str) -> None:
     with pytest.raises(ValueError):
         parse(text, TODAY)
-
-
-def test_unknown_expression_raises_date_parse_error() -> None:
-    with pytest.raises(DateParseError):
-        parse("hello world", TODAY)
